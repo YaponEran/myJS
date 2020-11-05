@@ -1,0 +1,125 @@
+
+//1
+
+if x == y then puts "x equals y" end
+if x != y: puts "x is not equal to y" end
+ifx>y
+puts "x is greater than y"
+end
+
+//2
+
+if !x == y then puts "x does not equal y" end
+if!x>y
+puts "x is not greater than y"
+end
+
+//block
+
+def gimme
+  if block_given?
+    yield
+    yield
+  else
+    puts 'not yet a block'
+  end
+end
+
+gimme{ puts "Yea I am a block"}
+
+
+
+
+
+//while
+
+i = 0
+breeds = ['arabian', 'Egymption', 'Norway', 'Turkmen']
+puts breeds.size
+
+teez = []
+
+while i < breeds.size
+  teez.push(breeds[i].capitalize)
+  i += 1
+end
+
+teez.each do |t|
+  puts t
+end
+
+\\\\\\\\\\\\
+
+i = 0
+country = ['Norway', "Arabian", "China", "Japan"]
+teez = []
+
+while i < country.size
+  teez << country[i]
+  break if teez[i] == "Arabian"
+  i += 1
+end
+
+puts teez
+
+///////////////////////
+
+sum = 100
+cash = 50
+
+cash += 5 while cash < sum
+puts cash
+
+
+The until Statement
+As unless is a negated form of if, until is a negated form of while. Compare the following statements:
+//--------------------------
+wheight = 150
+until wheight == 200
+  puts "wheight: #{wheight}"
+  wheight += 5
+end
+//--------------------------
+age = 10
+puts age += 1 until age > 28
+//--------------------------
+
+
+////// CASE
+//--------------------------
+lang = :de
+
+dog = case lang
+  when :fr then "P"
+  when :de then "A"
+  when :sx then "P"
+end
+
+puts dog
+//--------------------------
+
+
+Note the use of semicolons (;) in the when clauses:
+scale = 8
+out = case scale
+when 0 then "lowest" when 1..3; "medium-low" when 4..5; "medium" when 6..7; "medium-high" when 8..9; "high"
+when 10; "highest"
+else "off scale"
+end
+puts "Scale: " + out
+
+
+/////////CLASEES
+
+//--------------------------
+class MySingleTon
+end
+
+s = MySingleTon.new
+
+def s.name(name)
+  puts "name: #{name}"
+end
+
+s.name "Eran"
+//--------------------------

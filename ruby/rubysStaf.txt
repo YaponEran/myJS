@@ -1,0 +1,411 @@
+# a = Proc.new {|x, y| x = x * 10; puts "#{x} :#{y}"}
+# b = proc {|x| puts x}
+# c = lambda {|x| x = x * 5; puts x}
+
+# a.call(1, 2, 3)
+# b.call(1, 2, 3)
+# c.call(3)
+
+# x = "hello"
+# block = Proc.new{puts x}
+
+# def m(block)
+#   x = "Goodbye"
+#   puts "X = #{x}"
+#   block.call
+# end
+
+# m(block)
+
+# def m
+#   puts "Before Yield"
+#   yield
+#   puts "After Yield"
+# end
+
+# m{puts "In Yield"}
+
+# def caps(str)
+#   str.capitalize!
+#   yield(str)
+# end
+
+# caps('abc'){|x| puts x[0]}
+
+def cap(str, block)
+  str.capitalize!
+  block.call(str)
+end
+
+block = lambda{|x| puts x}
+
+cap("abc", block)
+
+def cap_2(str, &block)
+  str.capitalize!
+  block.call(str)
+end
+
+cap_2("abc"){|x| puts x}f
+
+
+=======================================================
+
+
+
+
+module FuelTank
+  def fill_tank(level)
+    self.fuel_tank = level
+  end
+
+  def fuel_level
+    self.fuel_tank
+  end
+  protected
+  attr_accessor :fuel_tank
+end
+
+module Debugger
+
+  module ClassMethods
+    def debug(log)
+      puts "Debug #{log}!!!"
+    end
+  end
+
+  module InstanceMethods
+    def debug(log)
+      self.class.debug(log)
+    end
+
+    def print_class
+      puts self.class
+    end
+  end
+
+end
+
+class Car
+  include FuelTank
+  extend Debugger::ClassMethods
+  include Debugger::InstanceMethods
+  @@instaces = 0
+  attr_reader :current_rpm
+
+  def initialize
+    @current_rpm = 0
+    @@instaces += 1
+    debug "Initialize"
+  end
+
+  # def self.debug(log)
+  #   puts "Debug #{log}!!!"
+  # end
+
+  debug "Start interface"
+
+  def self.instace_count
+    puts @@instaces
+  end
+
+  def start_engine
+    start_engine! if engine_stopped
+  end
+  debug "End intrfce"
+
+  protected
+  attr_writer :current_rpm
+  def engine_stopped
+    @current_rpm.zero?
+  end
+
+  def init_rpm
+    500
+  end
+
+  def start_engine!
+    @current_rpm = init_rpm
+  end
+end
+
+class MotoBike
+  include FuelTank
+  extend Debugger::ClassMethods
+  include Debugger::InstanceMethods
+
+  debug "Moto bike debugging"
+end
+
+car = Car.new
+moto = MotoBike.new
+
+car.fill_tank(400)
+moto.fill_tank(200)
+
+puts car.fuel_level
+puts moto.fuel_level
+
+puts "========================"
+car.print_class
+moto.print_class
+
+
+--------------------------------------------------------------------------------------------------------------
+
+
+
+
+module FuelTank
+  def fill_tank(level)
+    self.fuel_tank = level
+  end
+
+  def fuel_level
+    self.fuel_tank
+  end
+  protected
+  attr_accessor :fuel_tank
+end
+
+module Debuger
+
+  def self.included(base)
+    base.extend  ClassMethods
+    base.send :include,  InstanceMethods
+  end
+
+  module ClassMethods
+    def debug(log)
+      puts "Debug #{log}!!!"
+    end
+  end
+
+  module InstanceMethods
+    def debug(log)
+      self.class.debug(log)
+    end
+
+    def print_class
+      puts self.class
+    end
+  end
+
+end
+
+class Car
+  include FuelTank
+  include Debugger
+  @@instaces = 0
+  attr_reader :current_rpm
+
+  def initialize
+    @current_rpm = 0
+    @@instaces += 1
+    debug "Initialize"
+  end
+
+  # def self.debug(log)
+  #   puts "Debug #{log}!!!"
+  # end
+
+  debug "Start interface"
+
+  def self.instace_count
+    puts @@instaces
+  end
+
+  def start_engine
+    start_engine! if engine_stopped
+  end
+  debug "End intrfce"
+
+  protected
+  attr_writer :current_rpm
+  def engine_stopped
+    @current_rpm.zero?
+  end
+
+  def init_rpm
+    500
+  end
+
+  def start_engine!
+    @current_rpm = init_rpm
+  end
+end
+
+class MotoBike
+  include FuelTank
+  include Debugger
+
+  debug "Moto bike debugging"
+end
+
+car = Car.new
+moto = MotoBike.new
+
+car.fill_tank(400)
+moto.fill_tank(200)
+
+puts car.fuel_level
+puts moto.fuel_level
+
+puts "========================"
+car.print_class
+moto.print_class
+
+car.debug "Hello"
+
+
+
+
+a = Proc.new {|x| x = x * 10; puts x}
+b = proc {|x| x = x * 10; puts x}
+c = lambda {|x| x = x * 10; puts x}
+
+#practise
+
+x = "Hello"
+block = Proc.new{ puts x}
+
+def m(block)
+  x = "goodbye"
+  puts "X is a block"
+  block.call
+end
+
+m(block)
+
+#practise 2
+
+def men
+  puts "Hello i am Eran"
+  yield
+  puts "Ok bro !!!"
+end
+
+men {puts "Yoo i am a block"}
+
+def caps(str)
+  str.capitalize!
+  yield(str)
+end
+
+caps ("abs") {|str| puts str[0]}
+
+#practise 3
+
+def base(str, block)
+  str.capitalize!
+  block.call(str)
+end
+
+block = lambda{|x| puts x}
+base "abs", block
+
+#practise 3
+
+def puf(str, &block)
+  str.capitalize!
+  block.call(str)
+end
+
+puf('abc') {|x| puts x}
+
+
+def check(str, &block)
+  if block_given?
+    yield(str)
+  else 
+    puts str
+  end
+end
+
+check("hello") {|x| x.capitalize!; puts x}
+
+
+
+
+"IDIOMS"-----------------------------------"IDIOMS"-----------------------------------'
+
+class Foo
+  def bar(key)
+     h = {a: 1, b: 2}
+     value = h[key]
+     value ||= 0
+  end
+
+  def long_method
+    sleep(3)
+  end
+
+  def memoization
+    @m ||= long_method
+    puts @m
+  end
+end
+
+class User
+  attr_accessor :name
+
+  def has_name?
+    !!@name 
+  end
+
+  def has_no_name
+    !@name
+  end
+
+  def name=(value)
+    @name = value.capitalize
+  end
+end
+
+fruits = %w(apple orange grape) #fruits = ['apple'...]
+puts fruits.map(&:upcase)
+puts "======================"
+puts fruits
+
+class Color
+
+  COLORS = {red: "01red", green: "02green", blue: "03blue"}
+
+  def code(name)
+    @code = COLORS[name] || "000"
+end
+
+alias_method :by_code, :code
+end
+color = Color.new
+puts color.by_code(:red)
+
+
+class Train
+  attr_accessor :number, :type, :model, :num_of_vagosn
+  def initialize(*args)
+    @number = args[0] || "Unknown"
+    @type = args[1] || "Unknown"
+    @model = args[2] || "Unknown"
+    @num_of_vagosn = args[3] || "Unknown"
+  end
+end
+
+train = Train.new(335, "cargo", "Express", 10)
+
+class Train2
+  attr_accessor :number, :type, :model, :num_of_vagosn
+  def initialize(number, options = {})
+    @number = number || "Unknown"
+    @type = options[:type] || "Unknown"
+    @model = options[:model] || "Unknown"
+    @num_of_vagosn = options[:num_of_vagosn] || "Unknown"
+  end
+end
+
+train2 = Train2.new(336, type: "cargo", model: "Atu", num_of_vagosn: 10)
+puts train.number
+puts train.type
+puts train.model
+puts train.num_of_vagosn
+
